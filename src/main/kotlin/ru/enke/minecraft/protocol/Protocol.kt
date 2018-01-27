@@ -8,7 +8,7 @@ interface Protocol {
 
     companion object {
         // Current protocol version.
-        const val VERSION = 107
+        const val VERSION = 340 // 1.12.2
     }
 
     fun <T : PacketMessage> getPacketByMessage(direction: PacketDirection, message: T): Packet<T>
