@@ -9,7 +9,7 @@ import ru.enke.minecraft.protocol.packet.client.login.LoginStart
 import ru.enke.minecraft.protocol.packet.client.login.LoginStartPacket
 import ru.enke.minecraft.protocol.packet.server.login.*
 
-open class LoginProtocol(direction: PacketDirection, direction2: PacketDirection) : ru.enke.minecraft.protocol.SimpleProtocol() {
+open class LoginProtocol(direction: PacketDirection, direction2: PacketDirection) : SimpleProtocol() {
     init {
         registerPacket(direction, 0x00, LoginStartPacket, LoginStart::class)
         registerPacket(direction, 0x01, EncryptionResponsePacket, EncryptionResponse::class)
@@ -21,5 +21,5 @@ open class LoginProtocol(direction: PacketDirection, direction2: PacketDirection
     }
 }
 
-object ClientLoginProtocol : ru.enke.minecraft.protocol.LoginProtocol(OUTBOUND, INBOUND)
-object ServerLoginProtocol : ru.enke.minecraft.protocol.LoginProtocol(INBOUND, OUTBOUND)
+object ClientLoginProtocol : LoginProtocol(OUTBOUND, INBOUND)
+object ServerLoginProtocol : LoginProtocol(INBOUND, OUTBOUND)

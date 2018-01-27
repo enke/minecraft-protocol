@@ -12,7 +12,7 @@ import ru.enke.minecraft.protocol.packet.server.status.PingResponsePacket
 import ru.enke.minecraft.protocol.packet.server.status.StatusResponse
 import ru.enke.minecraft.protocol.packet.server.status.StatusResponsePacket
 
-open class StatusProtocol(direction: PacketDirection, direction2: PacketDirection) : ru.enke.minecraft.protocol.SimpleProtocol() {
+open class StatusProtocol(direction: PacketDirection, direction2: PacketDirection) : SimpleProtocol() {
     init {
         registerPacket(direction, 0x00, StatusRequestPacket, StatusRequest::class)
         registerPacket(direction, 0x01, PingRequestPacket, PingRequest::class)
@@ -22,5 +22,5 @@ open class StatusProtocol(direction: PacketDirection, direction2: PacketDirectio
     }
 }
 
-object ClientStatusProtocol : ru.enke.minecraft.protocol.StatusProtocol(OUTBOUND, INBOUND)
-object ServerStatusProtocol : ru.enke.minecraft.protocol.StatusProtocol(INBOUND, OUTBOUND)
+object ClientStatusProtocol : StatusProtocol(OUTBOUND, INBOUND)
+object ServerStatusProtocol : StatusProtocol(INBOUND, OUTBOUND)

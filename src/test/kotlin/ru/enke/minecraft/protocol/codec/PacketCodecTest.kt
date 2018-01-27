@@ -26,28 +26,28 @@ import ru.enke.minecraft.protocol.packet.data.game.Hand
 class PacketCodecTest {
 
     companion object {
-        val handshake = Handshake(ru.enke.minecraft.protocol.Protocol.VERSION, "localhost", 25565, STATUS)
+        val handshake = Handshake(Protocol.VERSION, "localhost", 25565, STATUS)
         val teleportConfirm = TeleportConfirm(15)
         val swingArm = SwingArm(Hand.MAIN_HAND)
     }
 
     @Test
     fun testEncode() {
-        val channel = EmbeddedChannel(ru.enke.minecraft.protocol.codec.PacketCodec(CLIENT))
+        val channel = EmbeddedChannel(PacketCodec(CLIENT))
         channel.writeOutbound(handshake)
 
         val buffer = channel.readOutbound<ByteBuf>()
 
         assertEquals(0x00, buffer.readVarInt())
-        assertEquals(ru.enke.minecraft.protocol.Protocol.VERSION, buffer.readVarInt())
+        assertEquals(Protocol.VERSION, buffer.readVarInt())
         assertEquals("localhost", buffer.readString())
         assertEquals(25565, buffer.readShort().toInt())
-        assertEquals(STATUS, buffer.readVarEnum<ru.enke.minecraft.protocol.ProtocolState>())
+        assertEquals(STATUS, buffer.readVarEnum<ProtocolState>())
     }
 
     @Test
     fun testDecode() {
-        val channel = EmbeddedChannel(ru.enke.minecraft.protocol.codec.PacketCodec(SERVER))
+        val channel = EmbeddedChannel(PacketCodec(SERVER))
         val buffer = Unpooled.buffer()
 
         buffer.writeVarInt(0x00)
@@ -55,7 +55,7 @@ class PacketCodecTest {
         channel.writeInbound(buffer)
 
         val inboundHandshake = channel.readInbound<PacketMessage>() as Handshake
-        assertEquals(ru.enke.minecraft.protocol.Protocol.VERSION, inboundHandshake.protocol)
+        assertEquals(Protocol.VERSION, inboundHandshake.protocol)
         assertEquals("localhost", inboundHandshake.hostname)
         assertEquals(25565, inboundHandshake.port)
         assertEquals(STATUS, inboundHandshake.state)
@@ -63,7 +63,7 @@ class PacketCodecTest {
 
     @Test(expected = DecoderException::class)
     fun testDecodeUnknownPacket() {
-        val channel = EmbeddedChannel(ru.enke.minecraft.protocol.codec.PacketCodec(CLIENT))
+        val channel = EmbeddedChannel(PacketCodec(CLIENT))
         val buffer = Unpooled.buffer()
         buffer.writeVarInt(0x02)
         channel.writeInbound(buffer)
@@ -121,12 +121,12 @@ class PacketCodecTest {
         assertNull(channel.readInbound<PacketMessage>())
     }
 
-    private fun createCodecWithFilter(mode: ru.enke.minecraft.protocol.codec.FilterMode, packet: Packet<*>): ru.enke.minecraft.protocol.codec.PacketCodec {
-        val filter = ru.enke.minecraft.protocol.codec.Filter(mode)
+    private fun createCodecWithFilter(mode: FilterMode, packet: Packet<*>): PacketCodec {
+        val filter = Filter(mode)
         filter.add(packet)
 
-        val packetCodec = ru.enke.minecraft.protocol.codec.PacketCodec(SERVER, filter = filter)
-        packetCodec.protocol = ru.enke.minecraft.protocol.ServerGameProtocol
+        val packetCodec = PacketCodec(SERVER, filter = filter)
+        packetCodec.protocol = ServerGameProtocol
 
         return packetCodec
     }

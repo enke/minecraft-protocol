@@ -18,7 +18,7 @@ import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnload
 import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnloadPacket
 import ru.enke.minecraft.protocol.packet.server.game.inventory.*
 
-open class GameProtocol(direction: PacketDirection, direction2: PacketDirection) : ru.enke.minecraft.protocol.SimpleProtocol() {
+open class GameProtocol(direction: PacketDirection, direction2: PacketDirection) : SimpleProtocol() {
     init {
         registerPacket(direction, 0x00, TeleportConfirmPacket, TeleportConfirm::class)
         registerPacket(direction, 0x01, TabCompleteRequestPacket, TabCompleteRequest::class)
@@ -84,5 +84,5 @@ open class GameProtocol(direction: PacketDirection, direction2: PacketDirection)
     }
 }
 
-object ClientGameProtocol : ru.enke.minecraft.protocol.GameProtocol(OUTBOUND, INBOUND)
-object ServerGameProtocol : ru.enke.minecraft.protocol.GameProtocol(INBOUND, OUTBOUND)
+object ClientGameProtocol : GameProtocol(OUTBOUND, INBOUND)
+object ServerGameProtocol : GameProtocol(INBOUND, OUTBOUND)

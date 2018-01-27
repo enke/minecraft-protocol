@@ -3,6 +3,9 @@ package ru.enke.minecraft.protocol.codec
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageCodec
+import ru.enke.minecraft.protocol.ProtocolSide
+import ru.enke.minecraft.protocol.ProtocolState
+import ru.enke.minecraft.protocol.ProtocolState.GAME
 import ru.enke.minecraft.protocol.ProtocolState.HANDSHAKE
 import ru.enke.minecraft.protocol.codec.FilterMode.ACCEPT
 import ru.enke.minecraft.protocol.codec.FilterMode.IGNORE
@@ -15,10 +18,10 @@ import ru.enke.minecraft.protocol.packet.readVarInt
 import ru.enke.minecraft.protocol.packet.server.login.LoginSuccess
 import ru.enke.minecraft.protocol.packet.writeVarInt
 
-class PacketCodec(val side: ru.enke.minecraft.protocol.ProtocolSide,
+class PacketCodec(val side: ProtocolSide,
                   val ignoreMissingPackets: Boolean = false,
                   val ignoreUnreadBuffer: Boolean = false,
-                  val filter: ru.enke.minecraft.protocol.codec.Filter? = null) : ByteToMessageCodec<PacketMessage>() {
+                  val filter: Filter? = null) : ByteToMessageCodec<PacketMessage>() {
 
     internal var protocol = HANDSHAKE.getProtocolBySide(side)
 
@@ -74,23 +77,23 @@ class PacketCodec(val side: ru.enke.minecraft.protocol.ProtocolSide,
     private fun handleProtocol(msg: PacketMessage) {
         when(msg) {
             is Handshake -> switchProtocol(msg.state)
-            is LoginSuccess -> switchProtocol(ru.enke.minecraft.protocol.ProtocolState.GAME)
+            is LoginSuccess -> switchProtocol(GAME)
         }
     }
 
-    private fun switchProtocol(state: ru.enke.minecraft.protocol.ProtocolState) {
+    private fun switchProtocol(state: ProtocolState) {
         protocol = state.getProtocolBySide(side)
     }
 
 }
 
-// Позволяет отсеивать ненужные пакеты перед их чтением.
-class Filter(val mode: ru.enke.minecraft.protocol.codec.FilterMode) : ArrayList<Packet<*>>()
+// Allows to filter out unnecessary packets before they are read.
+class Filter(val mode: FilterMode) : ArrayList<Packet<*>>()
 
-// Режимы фильтрации пакетов.
+// Packet filtering modes.
 enum class FilterMode {
-    // Прнимаем только пакеты, который указанны.
+    // Accept only specified packets packets.
     ACCEPT,
-    // Принимаем все пакеты, кроме указанных.
+    // Accept all packets except specified.
     IGNORE
 }

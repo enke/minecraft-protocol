@@ -12,7 +12,7 @@ import javax.crypto.SecretKey
 class EncryptionCodecTest {
 
     private val sharedSecret = createSharedSecret()
-    private val encryptionCodec = ru.enke.minecraft.protocol.codec.EncryptionCodec(sharedSecret)
+    private val encryptionCodec = EncryptionCodec(sharedSecret)
     private val channel = EmbeddedChannel(encryptionCodec)
     private val buffer = Unpooled.buffer()
 

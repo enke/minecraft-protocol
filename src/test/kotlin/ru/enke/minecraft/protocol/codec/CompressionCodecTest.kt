@@ -17,7 +17,7 @@ class CompressionCodecTest {
         private const val HELLO_STRING = "Hello compression codec"
     }
 
-    private val compressionCodec = ru.enke.minecraft.protocol.codec.CompressionCodec(50)
+    private val compressionCodec = CompressionCodec(50)
     private val channel = EmbeddedChannel(compressionCodec)
     private val buffer = Unpooled.buffer()
 

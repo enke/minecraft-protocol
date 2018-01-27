@@ -15,10 +15,10 @@ class LengthCodecTest {
 
     companion object {
         private const val HELLO_STRING = "Hello length codec"
-        private const val HELLO_STRING_LENGTH = 19 // 1 var int + 18 string
+        private const val HELLO_STRING_LENGTH = 1 + HELLO_STRING.length // 1 var int + 18 string
     }
 
-    private val lengthCodec = ru.enke.minecraft.protocol.codec.LengthCodec()
+    private val lengthCodec = LengthCodec()
     private val channel = EmbeddedChannel(lengthCodec)
     private val buffer = Unpooled.buffer()
 

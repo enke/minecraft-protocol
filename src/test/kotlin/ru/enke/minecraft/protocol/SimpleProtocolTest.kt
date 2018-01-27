@@ -19,7 +19,7 @@ class SimpleProtocolTest {
         private val PACKET_ID: Byte = 0x01
     }
 
-    private val protocol = ru.enke.minecraft.protocol.SimpleProtocol()
+    private val protocol = SimpleProtocol()
 
     @Before
     fun setUp() {

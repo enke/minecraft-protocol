@@ -18,7 +18,7 @@ class StatusResponsePacketTest {
 
     @Test
     fun testReadAndWrite() {
-        val version = Version("Test", ru.enke.minecraft.protocol.Protocol.VERSION)
+        val version = Version("Test", Protocol.VERSION)
         val description = Message("text").append("other text")
         val players = Players(50, 100, arrayListOf(Player(UUID.randomUUID(), "user")))
         val status = ServerStatusInfo(version, description, players)

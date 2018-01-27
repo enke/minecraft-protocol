@@ -6,11 +6,11 @@ import ru.enke.minecraft.protocol.packet.PacketDirection.OUTBOUND
 import ru.enke.minecraft.protocol.packet.client.handshake.Handshake
 import ru.enke.minecraft.protocol.packet.client.handshake.HandshakePacket
 
-open class HandshakeProtocol(direction: PacketDirection) : ru.enke.minecraft.protocol.SimpleProtocol() {
+open class HandshakeProtocol(direction: PacketDirection) : SimpleProtocol() {
     init {
         registerPacket(direction, 0x00, HandshakePacket, Handshake::class)
     }
 }
 
-object ClientHandshakeProtocol : ru.enke.minecraft.protocol.HandshakeProtocol(OUTBOUND)
-object ServerHandshakeProtocol : ru.enke.minecraft.protocol.HandshakeProtocol(INBOUND)
+object ClientHandshakeProtocol : HandshakeProtocol(OUTBOUND)
+object ServerHandshakeProtocol : HandshakeProtocol(INBOUND)

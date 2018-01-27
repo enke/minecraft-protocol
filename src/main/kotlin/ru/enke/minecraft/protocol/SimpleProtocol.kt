@@ -7,9 +7,9 @@ import ru.enke.minecraft.protocol.packet.PacketDirection.OUTBOUND
 import ru.enke.minecraft.protocol.packet.PacketMessage
 import kotlin.reflect.KClass
 
-open class SimpleProtocol : ru.enke.minecraft.protocol.Protocol {
-    private val inbound = ru.enke.minecraft.protocol.SimpleProtocol.DirectionHandler()
-    private val outbound = ru.enke.minecraft.protocol.SimpleProtocol.DirectionHandler()
+open class SimpleProtocol : Protocol {
+    private val inbound = DirectionHandler()
+    private val outbound = DirectionHandler()
 
     private class DirectionHandler {
         val idToPacket = HashMap<Byte, Packet<*>>()
@@ -17,7 +17,7 @@ open class SimpleProtocol : ru.enke.minecraft.protocol.Protocol {
         val messageToPacket = HashMap<KClass<out PacketMessage>, Packet<*>>()
     }
 
-    private fun getHandler(direction: PacketDirection): ru.enke.minecraft.protocol.SimpleProtocol.DirectionHandler {
+    private fun getHandler(direction: PacketDirection): DirectionHandler {
         when(direction) {
             INBOUND -> return inbound
             OUTBOUND -> return outbound

@@ -62,8 +62,8 @@ class CompressionCodec(var threshold: Int) : ByteToMessageCodec<ByteBuf>() {
             throw DecoderException("Badly compressed packet: size of $size is below threshold of $threshold")
         }
 
-        if(size > ru.enke.minecraft.protocol.codec.CompressionCodec.Companion.MAX_COMPRESSED_SIZE) {
-            throw DecoderException("Badly compressed packet: size of $size is larger than protocol maximum of ${ru.enke.minecraft.protocol.codec.CompressionCodec.Companion.MAX_COMPRESSED_SIZE}")
+        if(size > MAX_COMPRESSED_SIZE) {
+            throw DecoderException("Badly compressed packet: size of $size is larger than protocol maximum of ${MAX_COMPRESSED_SIZE}")
         }
 
         val bytes = ByteArray(buf.readableBytes())
