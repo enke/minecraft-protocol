@@ -9,7 +9,7 @@ import ru.enke.minecraft.protocol.packet.writeVarInt
 object SpawnExpOrbPacket : Packet<SpawnExpOrb> {
 
     override fun write(message: SpawnExpOrb, buffer: ByteBuf) {
-        buffer.writeVarInt(message.entityId)
+        buffer.writeVarInt(message.id)
         buffer.writeDouble(message.x)
         buffer.writeDouble(message.y)
         buffer.writeDouble(message.z)
@@ -17,15 +17,15 @@ object SpawnExpOrbPacket : Packet<SpawnExpOrb> {
     }
 
     override fun read(buffer: ByteBuf): SpawnExpOrb {
-        val entityId = buffer.readVarInt()
+        val id = buffer.readVarInt()
         val x = buffer.readDouble()
         val y = buffer.readDouble()
         val z = buffer.readDouble()
         val amount = buffer.readShort().toInt()
 
-        return SpawnExpOrb(entityId, x, y, z, amount)
+        return SpawnExpOrb(id, x, y, z, amount)
     }
 
 }
 
-data class SpawnExpOrb(val entityId: Int, val x: Double, val y: Double, val z: Double, val amount: Int) : PacketMessage
+data class SpawnExpOrb(val id: Int, val x: Double, val y: Double, val z: Double, val amount: Int) : PacketMessage
