@@ -45,7 +45,7 @@ open class GameProtocol(direction: PacketDirection, direction2: PacketDirection)
         registerPacket(direction, 0x16, SteerVehiclePacket, SteerVehicle::class)
         registerPacket(direction, 0x17, CraftingBookDataPacket, CraftingBookData::class)
         registerPacket(direction, 0x18, ResourcePackStatusPacket, ResourcePackStatus::class)
-
+        registerPacket(direction, 0x19, AdvancementTabPacket, AdvancementTab::class)
         registerPacket(direction, 0x1A, ClientItemHeldChangePacket, ClientItemHeldChange::class)
         registerPacket(direction, 0x1B, CreativeInventoryActionPacket, CreativeInventoryAction::class)
         registerPacket(direction, 0x1C, ClientUpdateSignPacket, ClientUpdateSign::class)
