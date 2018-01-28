@@ -1,10 +1,16 @@
 package ru.enke.minecraft.protocol.packet
 
 import io.netty.buffer.ByteBuf
-import ru.enke.minecraft.protocol.packet.data.game.BlockState
-import ru.enke.minecraft.protocol.packet.data.game.Position
-import ru.enke.minecraft.protocol.packet.data.game.Slot
+import ru.enke.minecraft.protocol.packet.data.game.*
+import ru.enke.minecraft.protocol.packet.data.game.EntityMetadataType.*
+import ru.enke.minecraft.protocol.packet.data.message.Message
 import java.util.*
+import kotlin.collections.ArrayList
+import java.lang.reflect.Array.setFloat
+import java.lang.reflect.Array.setShort
+import java.lang.reflect.Array.setByte
+import kotlin.experimental.and
+
 
 interface PacketMessage
 
@@ -208,4 +214,85 @@ fun ByteBuf.readBytes(): ByteArray {
     readBytes(bytes)
 
     return bytes
+}
+
+fun ByteBuf.writeEntityMetadata(metadata: List<EntityMetadata>) {
+    for((id, type, value) in metadata) {
+        writeByte(id)
+        writeVarEnum(type)
+
+        when(type) {
+            BYTE -> writeByte(value as Int)
+            INT -> writeInt(value as Int)
+            FLOAT -> writeFloat(value as Float)
+            STRING -> writeString(value as String)
+            CHAT -> writeString((value as Message).toJson())
+            SLOT -> writeSlot(value as Slot)
+            BOOLEAN -> writeBoolean(value as Boolean)
+            ROTATION -> {}
+            POSITION -> readPosition()
+            OPTIONAL_POSITION -> {}
+            BLOCK_FACE -> writeVarEnum(value as BlockFace)
+            OPTIONAL_UUID -> {}
+            BLOCK_STATE -> writeBlockState(value as BlockState)
+            NBT_TAG -> {}
+        }
+    }
+}
+
+fun ByteBuf.readEntityMetadata() : List<EntityMetadata> {
+    val metadata = ArrayList<EntityMetadata>()
+
+    while(true) {
+        val id = readUnsignedByte().toInt()
+
+        if(255 == id) {
+            break
+        }
+
+        val types = EntityMetadataType.values()
+        val typeId = readVarInt()
+
+        if(typeId > types.size || typeId < 0) {
+            throw IllegalStateException()
+        }
+
+        val type = types[typeId]
+        val value: Any? = when(type) {
+            BYTE -> readByte()
+            INT -> readVarInt()
+            FLOAT -> readFloat()
+            STRING -> readString()
+            CHAT -> Message.fromJson(readString())
+            SLOT -> readSlot()
+            BOOLEAN -> readBoolean()
+            ROTATION -> null
+            POSITION -> readPosition()
+            OPTIONAL_POSITION -> {
+                val positionPresent = readBoolean()
+
+                if(positionPresent) {
+                    readPosition()
+                } else {
+                    null
+                }
+            }
+            BLOCK_FACE -> readVarEnum<BlockFace>()
+            OPTIONAL_UUID -> {
+                val uuidPresent = readBoolean()
+
+                if(uuidPresent) {
+                    readUUID()
+                } else {
+                    null
+                }
+            }
+            BLOCK_STATE -> readBlockState()
+            NBT_TAG -> null
+        }
+
+        metadata.add(EntityMetadata(id, type, value))
+    }
+
+    return metadata
 }
