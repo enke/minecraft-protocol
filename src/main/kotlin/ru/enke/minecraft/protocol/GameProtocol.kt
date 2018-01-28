@@ -16,10 +16,7 @@ import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkData
 import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkDataPacket
 import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnload
 import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnloadPacket
-import ru.enke.minecraft.protocol.packet.server.game.entity.SpawnExpOrb
-import ru.enke.minecraft.protocol.packet.server.game.entity.SpawnExpOrbPacket
-import ru.enke.minecraft.protocol.packet.server.game.entity.SpawnGlobalEntity
-import ru.enke.minecraft.protocol.packet.server.game.entity.SpawnGlobalEntityPacket
+import ru.enke.minecraft.protocol.packet.server.game.entity.*
 import ru.enke.minecraft.protocol.packet.server.game.inventory.*
 
 open class GameProtocol(direction: PacketDirection, direction2: PacketDirection) : SimpleProtocol() {
@@ -58,6 +55,7 @@ open class GameProtocol(direction: PacketDirection, direction2: PacketDirection)
         registerPacket(direction, 0x1F, BlockPlacePacket, BlockPlace::class)
         registerPacket(direction, 0x20, UseItemPacket, UseItem::class)
 
+        registerPacket(direction2, 0x00, SpawnObjectPacket, SpawnObject::class)
         registerPacket(direction2, 0x01, SpawnExpOrbPacket, SpawnExpOrb::class)
         registerPacket(direction2, 0x02, SpawnGlobalEntityPacket, SpawnGlobalEntity::class)
         registerPacket(direction2, 0x06, AnimationPacket, Animation::class)
