@@ -13,6 +13,12 @@ object SpawnObjectPacket : Packet<SpawnObject> {
         buffer.writeDouble(message.x)
         buffer.writeDouble(message.y)
         buffer.writeDouble(message.z)
+        buffer.writeByte((message.yaw * 256 / 360).toInt())
+        buffer.writeByte((message.pitch * 256 / 360).toInt())
+        buffer.writeInt(message.data)
+        buffer.writeShort((message.velocityX * 8000).toInt())
+        buffer.writeShort((message.velocityX * 8000).toInt())
+        buffer.writeShort((message.velocityX * 8000).toInt())
     }
 
     override fun read(buffer: ByteBuf): SpawnObject {
