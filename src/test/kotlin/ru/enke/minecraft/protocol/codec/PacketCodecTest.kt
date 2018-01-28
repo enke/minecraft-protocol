@@ -75,7 +75,7 @@ class PacketCodecTest {
         val channel = EmbeddedChannel(packetCodec)
         val buffer = Unpooled.buffer()
 
-        buffer.writeVarInt(0x1A)
+        buffer.writeVarInt(0x1D)
         SwingArmPacket.write(swingArm, buffer)
         channel.writeInbound(buffer)
 
@@ -114,7 +114,7 @@ class PacketCodecTest {
         val channel = EmbeddedChannel(packetCodec)
         val buffer = Unpooled.buffer()
 
-        buffer.writeVarInt(0x1A)
+        buffer.writeVarInt(0x1D)
         SwingArmPacket.write(swingArm, buffer)
         channel.writeInbound(buffer)
 
