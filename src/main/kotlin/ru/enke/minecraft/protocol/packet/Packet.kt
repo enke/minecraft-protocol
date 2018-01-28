@@ -238,6 +238,8 @@ fun ByteBuf.writeEntityMetadata(metadata: List<EntityMetadata>) {
             NBT_TAG -> {}
         }
     }
+
+    writeByte(255)
 }
 
 fun ByteBuf.readEntityMetadata() : List<EntityMetadata> {
