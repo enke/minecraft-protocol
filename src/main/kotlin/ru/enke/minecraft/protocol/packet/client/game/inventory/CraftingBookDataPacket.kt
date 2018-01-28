@@ -1,18 +1,15 @@
 package ru.enke.minecraft.protocol.packet.client.game.inventory
 
 import io.netty.buffer.ByteBuf
-import ru.enke.minecraft.protocol.packet.Packet
-import ru.enke.minecraft.protocol.packet.PacketMessage
+import ru.enke.minecraft.protocol.packet.*
 import ru.enke.minecraft.protocol.packet.data.game.CraftingBookDataType
 import ru.enke.minecraft.protocol.packet.data.game.CraftingBookDataType.CRAFTING_BOOK_STATUS
 import ru.enke.minecraft.protocol.packet.data.game.CraftingBookDataType.DISPLAYED_RECIPE
-import ru.enke.minecraft.protocol.packet.readVarEnum
-import ru.enke.minecraft.protocol.packet.writeEnum
 
 object CraftingBookDataPacket : Packet<CraftingBookData> {
 
     override fun write(message: CraftingBookData, buffer: ByteBuf) {
-        buffer.writeEnum(message.type)
+        buffer.writeVarEnum(message.type)
 
         when(message.type) {
             DISPLAYED_RECIPE -> buffer.writeInt(message.recipeId)
