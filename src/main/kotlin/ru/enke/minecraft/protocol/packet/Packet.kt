@@ -115,6 +115,10 @@ inline fun <reified T : Enum<T>> ByteBuf.readVarEnum(): T {
     val enums = enumValues<T>()
     val index = readVarInt()
 
+    if(index < 0) {
+        throw IllegalArgumentException()
+    }
+
     if(index > enums.size) {
         throw IllegalArgumentException()
     }
