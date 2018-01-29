@@ -1,7 +1,7 @@
 apply plugin: 'kotlin'
 
 group = 'ru.enke.minecraft.protocol'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 buildscript {
     repositories {
