@@ -3,7 +3,7 @@ package ru.enke.minecraft.protocol.packet.data.message
 import com.google.gson.*
 import java.lang.reflect.Type
 
-data class Message(var text: String?,
+data class Message @JvmOverloads constructor(var text: String?,
                    var color: MessageColor = MessageColor.WHITE,
                    var bold: Boolean = false,
                    var italic: Boolean = false,

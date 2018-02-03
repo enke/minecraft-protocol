@@ -18,7 +18,7 @@ import ru.enke.minecraft.protocol.packet.readVarInt
 import ru.enke.minecraft.protocol.packet.server.login.LoginSuccess
 import ru.enke.minecraft.protocol.packet.writeVarInt
 
-class PacketCodec(val side: ProtocolSide,
+class PacketCodec @JvmOverloads constructor(val side: ProtocolSide,
                   val ignoreMissingPackets: Boolean = false,
                   val ignoreUnreadBuffer: Boolean = false,
                   val filter: Filter? = null) : ByteToMessageCodec<PacketMessage>() {
