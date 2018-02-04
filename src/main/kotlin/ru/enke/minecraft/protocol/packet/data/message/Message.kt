@@ -2,6 +2,8 @@ package ru.enke.minecraft.protocol.packet.data.message
 
 import com.google.gson.*
 import java.lang.reflect.Type
+import com.google.gson.JsonElement
+import com.google.gson.JsonArray
 
 data class Message @JvmOverloads constructor(var text: String?,
                    var color: MessageColor = MessageColor.WHITE,
@@ -20,6 +22,7 @@ data class Message @JvmOverloads constructor(var text: String?,
                 .registerTypeAdapter(MessageColor::class.java, EnumAdapter<MessageColor>())
                 .registerTypeAdapter(HoverAction::class.java, EnumAdapter<HoverAction>())
                 .registerTypeAdapter(ClickAction::class.java, EnumAdapter<ClickAction>())
+                .registerTypeAdapter(List::class.java, ExtraAdapter())
                 .create()
 
         fun fromJson(json: String): Message {
@@ -40,6 +43,23 @@ data class Message @JvmOverloads constructor(var text: String?,
 
         override fun serialize(value: Enum<T>, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return JsonPrimitive(value.name.toLowerCase())
+        }
+    }
+
+    // Vanilla client throws exception when receive empty extra.
+    private class ExtraAdapter : JsonSerializer<List<Message>?> {
+        override fun serialize(value: List<Message>?, typeOfSrc: Type, context: JsonSerializationContext): JsonElement? {
+            if (value == null || value.isEmpty()) {
+                return null
+            }
+
+            val array = JsonArray()
+
+            for(child in value) {
+                array.add(context.serialize(child))
+            }
+
+            return array
         }
     }
 

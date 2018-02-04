@@ -1,7 +1,7 @@
 package ru.enke.minecraft.protocol.data.message
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import com.google.gson.JsonParser
+import org.junit.Assert.*
 import org.junit.Test
 import ru.enke.minecraft.protocol.packet.data.message.Message
 import ru.enke.minecraft.protocol.packet.data.message.MessageColor.DARK_GREEN
@@ -34,6 +34,16 @@ class MessageTest {
     fun testFromString() {
         val message = Message.fromJson("Hello people !")
         assertEquals("Hello people !", message.text)
+    }
+
+    @Test
+    fun testNullExtra() {
+        val json = Message("Hello", DARK_GREEN).toJson()
+
+        val jsonParser = JsonParser()
+        val jsonObject = jsonParser.parse(json).asJsonObject
+
+        assertFalse(jsonObject.has("extra"))
     }
 
 }
