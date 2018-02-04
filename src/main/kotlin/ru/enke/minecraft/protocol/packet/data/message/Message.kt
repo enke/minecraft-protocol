@@ -2,8 +2,6 @@ package ru.enke.minecraft.protocol.packet.data.message
 
 import com.google.gson.*
 import java.lang.reflect.Type
-import com.google.gson.JsonElement
-import com.google.gson.JsonArray
 
 data class Message @JvmOverloads constructor(var text: String?,
                    var color: MessageColor = MessageColor.WHITE,
@@ -15,23 +13,31 @@ data class Message @JvmOverloads constructor(var text: String?,
                    var insertion: String? = null,
                    var hoverEvent: HoverEvent? = null,
                    var clickEvent: ClickEvent? = null,
-                   val extra: MutableList<Message> = mutableListOf<Message>()) {
+                   val extra: MutableList<Message> = mutableListOf()) {
 
     companion object {
         private val gson = GsonBuilder()
                 .registerTypeAdapter(MessageColor::class.java, EnumAdapter<MessageColor>())
                 .registerTypeAdapter(HoverAction::class.java, EnumAdapter<HoverAction>())
                 .registerTypeAdapter(ClickAction::class.java, EnumAdapter<ClickAction>())
-                .registerTypeAdapter(List::class.java, ExtraAdapter())
                 .create()
 
+        private val jsonParser = JsonParser()
+
         fun fromJson(json: String): Message {
-            // It is assumed that we did not receive JSON, but plain text.
+            // We can receive plain text with old versions of minecraft.
             if(!json.startsWith("[") && !json.startsWith("{")) {
                 return Message(json)
             }
 
-            return gson.fromJson(json, Message::class.java)
+            // Convert extra -> null list to empty list.
+            val jsonObject = jsonParser.parse(json).asJsonObject
+
+            if(!jsonObject.has("extra")) {
+                jsonObject.add("extra", JsonArray())
+            }
+
+            return gson.fromJson(jsonObject, Message::class.java)
         }
     }
 
@@ -46,23 +52,6 @@ data class Message @JvmOverloads constructor(var text: String?,
         }
     }
 
-    // Vanilla client throws exception when receive empty extra.
-    private class ExtraAdapter : JsonSerializer<List<Message>?> {
-        override fun serialize(value: List<Message>?, typeOfSrc: Type, context: JsonSerializationContext): JsonElement? {
-            if (value == null || value.isEmpty()) {
-                return null
-            }
-
-            val array = JsonArray()
-
-            for(child in value) {
-                array.add(context.serialize(child))
-            }
-
-            return array
-        }
-    }
-
     fun append(text: String): Message {
         return append(Message(text))
     }
@@ -73,7 +62,17 @@ data class Message @JvmOverloads constructor(var text: String?,
     }
 
     fun toJson(): String {
-        return gson.toJson(this)
+        val json = gson.toJson(this)
+
+        // Vanilla client throws exception when receive empty extra.
+        val jsonObject = jsonParser.parse(json).asJsonObject
+        val jsonArray = jsonObject.getAsJsonArray("extra")
+
+        if(jsonArray.size() == 0) {
+            jsonObject.remove("extra")
+        }
+
+        return gson.toJson(jsonObject)
     }
 
 }

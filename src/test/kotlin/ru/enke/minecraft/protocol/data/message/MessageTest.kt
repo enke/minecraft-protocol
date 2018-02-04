@@ -37,13 +37,23 @@ class MessageTest {
     }
 
     @Test
-    fun testNullExtra() {
+    fun testToNullExtra() {
         val json = Message("Hello", DARK_GREEN).toJson()
 
         val jsonParser = JsonParser()
         val jsonObject = jsonParser.parse(json).asJsonObject
 
         assertFalse(jsonObject.has("extra"))
+    }
+
+    @Test
+    fun testFromNullExtra() {
+        val json = "{\"text\":\"Hello\",\"color\":\"dark_green\",\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false}"
+        val message = Message.fromJson(json)
+
+        assertNotNull(message)
+        assertNotNull(message.extra)
+        assertEquals(0, message.extra.size)
     }
 
 }
