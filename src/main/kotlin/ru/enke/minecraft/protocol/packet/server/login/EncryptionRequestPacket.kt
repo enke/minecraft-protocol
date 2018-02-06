@@ -21,4 +21,6 @@ object EncryptionRequestPacket : Packet<EncryptionRequest> {
 
 }
 
-data class EncryptionRequest(val serverId: String, val publicKey: ByteArray, val verifyToken: ByteArray) : PacketMessage
+data class EncryptionRequest @JvmOverloads constructor(val serverId: String = "",
+                                                       val publicKey: ByteArray,
+                                                       val verifyToken: ByteArray) : PacketMessage
