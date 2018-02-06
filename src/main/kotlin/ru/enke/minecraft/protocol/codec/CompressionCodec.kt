@@ -1,4 +1,3 @@
-
 package ru.enke.minecraft.protocol.codec
 
 import io.netty.buffer.ByteBuf
@@ -11,10 +10,10 @@ import ru.enke.minecraft.protocol.packet.writeVarInt
 import java.util.zip.Deflater
 import java.util.zip.Inflater
 
-class CompressionCodec(var threshold: Int) : ByteToMessageCodec<ByteBuf>() {
+class CompressionCodec @JvmOverloads constructor(var threshold: Int = 300) : ByteToMessageCodec<ByteBuf>() {
 
     companion object {
-        private const val MAX_COMPRESSED_SIZE = 2097152
+        private const val MAX_COMPRESSED_SIZE = 2_097_152
     }
 
     private val deflater = Deflater()
@@ -24,7 +23,7 @@ class CompressionCodec(var threshold: Int) : ByteToMessageCodec<ByteBuf>() {
     override fun encode(ctx: ChannelHandlerContext, buf: ByteBuf, out: ByteBuf) {
         val size = buf.readableBytes()
 
-        // Не привышен порог для сжатия.
+        // Threshold not reached.
         if(threshold > size) {
             out.writeVarInt(0)
             out.writeBytes(buf)
