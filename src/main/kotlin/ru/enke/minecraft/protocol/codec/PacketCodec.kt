@@ -5,8 +5,7 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageCodec
 import ru.enke.minecraft.protocol.ProtocolSide
 import ru.enke.minecraft.protocol.ProtocolState
-import ru.enke.minecraft.protocol.ProtocolState.GAME
-import ru.enke.minecraft.protocol.ProtocolState.HANDSHAKE
+import ru.enke.minecraft.protocol.ProtocolState.*
 import ru.enke.minecraft.protocol.codec.FilterMode.ACCEPT
 import ru.enke.minecraft.protocol.codec.FilterMode.IGNORE
 import ru.enke.minecraft.protocol.packet.Packet
@@ -76,7 +75,15 @@ class PacketCodec @JvmOverloads constructor(val side: ProtocolSide,
 
     private fun handleProtocol(msg: PacketMessage) {
         when(msg) {
-            is Handshake -> switchProtocol(msg.state)
+            is Handshake -> {
+                val state = msg.state
+
+                if(state != LOGIN && state != STATUS) {
+                    throw IllegalArgumentException("Bad protocol state received")
+                }
+
+                switchProtocol(state)
+            }
             is LoginSuccess -> switchProtocol(GAME)
         }
     }
