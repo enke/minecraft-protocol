@@ -10,10 +10,11 @@ import ru.enke.minecraft.protocol.packet.writeVarInt
 import java.util.zip.Deflater
 import java.util.zip.Inflater
 
-class CompressionCodec @JvmOverloads constructor(var threshold: Int = 300) : ByteToMessageCodec<ByteBuf>() {
+class CompressionCodec @JvmOverloads constructor(var threshold: Int = DEFAULT_COMPRESSION_THRESHOLD) : ByteToMessageCodec<ByteBuf>() {
 
     companion object {
-        private const val MAX_COMPRESSED_SIZE = 2_097_152
+        const val DEFAULT_COMPRESSION_THRESHOLD = 300
+        const val MAXIMUM_COMPRESSION_SIZE = 2_097_152
     }
 
     private val deflater = Deflater()
@@ -61,8 +62,8 @@ class CompressionCodec @JvmOverloads constructor(var threshold: Int = 300) : Byt
             throw DecoderException("Badly compressed packet: size of $size is below threshold of $threshold")
         }
 
-        if(size > MAX_COMPRESSED_SIZE) {
-            throw DecoderException("Badly compressed packet: size of $size is larger than protocol maximum of ${MAX_COMPRESSED_SIZE}")
+        if(size > MAXIMUM_COMPRESSION_SIZE) {
+            throw DecoderException("Badly compressed packet: size of $size is larger than protocol maximum of $MAXIMUM_COMPRESSION_SIZE")
         }
 
         val bytes = ByteArray(buf.readableBytes())
