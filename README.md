@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.org/enke/minecraft-protocol.svg?branch=master)](https://travis-ci.org/enke/minecraft-protocol)
+[![Build Status](https://travis-ci.org/enke/minecraft-protocol.svg?branch=master)](https://travis-ci.org/enke/minecraft-protocol) [![](https://jitpack.io/v/enke/minecraft-protocol.svg)](https://jitpack.io/#enke/minecraft-protocol)
