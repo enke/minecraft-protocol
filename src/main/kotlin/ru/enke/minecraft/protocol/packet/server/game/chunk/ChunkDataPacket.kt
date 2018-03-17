@@ -11,6 +11,7 @@ object ChunkDataPacket : Packet<ChunkData> {
         buffer.writeBoolean(message.full)
         buffer.writeVarInt(message.mask)
         buffer.writeByteArray(message.data)
+        buffer.writeVarInt(0)
     }
 
     override fun read(buffer: ByteBuf): ChunkData {
