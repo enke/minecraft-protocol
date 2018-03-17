@@ -11,7 +11,7 @@ object JoinGamePacket : Packet<JoinGame> {
     override fun write(message: JoinGame, buffer: ByteBuf) {
         buffer.writeInt(message.entityId)
         buffer.writeEnum(message.gameMode)
-        buffer.writeByte(message.dimension)
+        buffer.writeInt(message.dimension)
         buffer.writeEnum(message.difficulty)
         buffer.writeByte(message.maxPlayers)
         buffer.writeEnumAsString(message.worldType)
@@ -21,7 +21,7 @@ object JoinGamePacket : Packet<JoinGame> {
     override fun read(buffer: ByteBuf): JoinGame {
         val entityId = buffer.readInt()
         val gameMode = buffer.readEnum<GameMode>()
-        val dimension = buffer.readByte().toInt()
+        val dimension = buffer.readInt()
         val difficulty = buffer.readEnum<Difficulty>()
         val maxPlayers = buffer.readByte().toInt()
         val worldType = buffer.readEnumAsString<WorldType>()
