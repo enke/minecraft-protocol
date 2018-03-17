@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf
 import ru.enke.minecraft.protocol.packet.*
 import ru.enke.minecraft.protocol.packet.data.game.Position
 
-object ClientUpdateSignPacket : Packet<ClientUpdateSign> {
+object SignUpdatePacket : Packet<SignUpdate> {
 
-    override fun write(message: ClientUpdateSign, buffer: ByteBuf) {
+    override fun write(message: SignUpdate, buffer: ByteBuf) {
         buffer.writePosition(message.position)
 
         for(line in message.lines) {
@@ -14,7 +14,7 @@ object ClientUpdateSignPacket : Packet<ClientUpdateSign> {
         }
     }
 
-    override fun read(buffer: ByteBuf): ClientUpdateSign {
+    override fun read(buffer: ByteBuf): SignUpdate {
         val position = buffer.readPosition()
         val lines = arrayOfNulls<String>(4)
 
@@ -22,9 +22,9 @@ object ClientUpdateSignPacket : Packet<ClientUpdateSign> {
            lines[i] = buffer.readString()
         }
 
-        return ClientUpdateSign(position, lines)
+        return SignUpdate(position, lines)
     }
 
 }
 
-data class ClientUpdateSign(val position: Position, val lines: Array<String?>) : PacketMessage
+data class SignUpdate(val position: Position, val lines: Array<String?>) : PacketMessage
