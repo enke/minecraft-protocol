@@ -18,6 +18,10 @@ import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnload
 import ru.enke.minecraft.protocol.packet.server.game.chunk.ChunkUnloadPacket
 import ru.enke.minecraft.protocol.packet.server.game.entity.*
 import ru.enke.minecraft.protocol.packet.server.game.inventory.*
+import ru.enke.minecraft.protocol.packet.server.game.player.ServerPlayerAbilities
+import ru.enke.minecraft.protocol.packet.server.game.player.ServerPlayerAbilitiesPacket
+import ru.enke.minecraft.protocol.packet.server.game.player.ServerPlayerPositionAndLookPacket
+import ru.enke.minecraft.protocol.packet.server.game.player.ServerPlayerPositionLook
 
 open class GameProtocol(direction: PacketDirection, direction2: PacketDirection) : SimpleProtocol() {
     init {
@@ -90,6 +94,7 @@ open class GameProtocol(direction: PacketDirection, direction2: PacketDirection)
         registerPacket(direction2, 0x23, JoinGamePacket, JoinGame::class)
         registerPacket(direction2, 0x35, RespawnPacket, Respawn::class)
         registerPacket(direction2, 0x2C, ServerPlayerAbilitiesPacket, ServerPlayerAbilities::class)
+        registerPacket(direction2, 0x2F, ServerPlayerPositionAndLookPacket, ServerPlayerPositionLook::class)
         registerPacket(direction2, 0x38, WorldBorderPacket, WorldBorder::class)
         registerPacket(direction2, 0x3A, ServerItemHeldChangePacket, ServerItemHeldChange::class)
         registerPacket(direction2, 0x46, SpawnPositionPacket, SpawnPosition::class)

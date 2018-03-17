@@ -1,4 +1,4 @@
-package ru.enke.minecraft.protocol.packet.server.game
+package ru.enke.minecraft.protocol.packet.server.game.player
 
 import io.netty.buffer.ByteBuf
 import ru.enke.minecraft.protocol.packet.Packet
