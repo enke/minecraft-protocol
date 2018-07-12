@@ -1,3 +1,5 @@
+package ru.enke.minecraft.protocol.util
+
 class VariableValueArray(private val bitsPerValue: Int, private val capacity: Int) {
     private val backing: LongArray
     private val largestPossibleValue: Long
